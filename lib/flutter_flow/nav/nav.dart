@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '/backend/schema/structs/index.dart';
+
 import '/index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
@@ -38,8 +40,28 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         ),
         FFRoute(
           name: 'HomePage',
-          path: '/homePage',
+          path: '/HomePage',
           builder: (context, params) => const HomePageWidget(),
+        ),
+        FFRoute(
+          name: 'Cartoes',
+          path: '/cartoes',
+          builder: (context, params) => const CartoesWidget(),
+        ),
+        FFRoute(
+          name: 'DetalheCartao',
+          path: '/detalheCartao',
+          builder: (context, params) => DetalheCartaoWidget(
+            descIdeia: params.getParam(
+              'descIdeia',
+              ParamType.JSON,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'CadastrarCartao',
+          path: '/cadastrarCartao',
+          builder: (context, params) => const CadastrarCartaoWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -111,6 +133,7 @@ class FFParameters {
     String paramName,
     ParamType type, {
     bool isList = false,
+    StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -128,6 +151,7 @@ class FFParameters {
       param,
       type,
       isList,
+      structBuilder: structBuilder,
     );
   }
 }

@@ -1,18 +1,60 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
-import '/flutter_flow/flutter_flow_util.dart';
 import 'api_manager.dart';
 
 export 'api_manager.dart' show ApiCallResponse;
 
 const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
-class SetoresCall {
-  static Future<ApiCallResponse> call() async {
+/// Start crud Group Code
+
+class CrudGroup {
+  static String getBaseUrl() => 'https://ci-crud.onrender.com';
+  static Map<String, String> headers = {};
+  static LoginCall loginCall = LoginCall();
+  static GetCartoesByUserCall getCartoesByUserCall = GetCartoesByUserCall();
+}
+
+class LoginCall {
+  Future<ApiCallResponse> call({
+    String? user = '',
+    String? password = '',
+  }) async {
+    final baseUrl = CrudGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "nome_usuario": "$user",
+  "senha_usuario": "$password"
+}''';
     return ApiManager.instance.makeApiCall(
-      callName: 'setores',
-      apiUrl: 'https://ci-crud.onrender.com/setor',
+      callName: 'login',
+      apiUrl: '$baseUrl/usuarios/login',
+      callType: ApiCallType.POST,
+      headers: {},
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class GetCartoesByUserCall {
+  Future<ApiCallResponse> call({
+    int? userId,
+  }) async {
+    final baseUrl = CrudGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'getCartoesByUser',
+      apiUrl: '$baseUrl/cartoes/user/$userId',
       callType: ApiCallType.GET,
       headers: {},
       params: {},
@@ -23,13 +65,9 @@ class SetoresCall {
       alwaysAllowBody: false,
     );
   }
-
-  static List? data(dynamic response) => getJsonField(
-        response,
-        r'''$.data''',
-        true,
-      ) as List?;
 }
+
+/// End crud Group Code
 
 class ApiPagingParams {
   int nextPageNumber = 0;
